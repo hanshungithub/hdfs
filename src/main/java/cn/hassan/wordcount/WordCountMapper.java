@@ -1,4 +1,4 @@
-package cn.hassan.mr;
+package cn.hassan.wordcount;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
