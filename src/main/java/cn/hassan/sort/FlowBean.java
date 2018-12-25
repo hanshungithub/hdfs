@@ -84,7 +84,11 @@ public class FlowBean implements WritableComparable<FlowBean> {
         return upFlow + "\t" + downFlow + "\t" + totalFlow;
     }
 
-    public int compareTo(FlowBean o) {
-        return (int) (this.totalFlow - o.getTotalFlow());
+	/**
+	 *   return s1.age > s2.age ? 1 : -1; 返回值为1时，也就是说 s1的值大于s2的值时 ，compareTo是按照升序（由小到大）排序的！
+	 *  当返回值为-1时，也就是说 s1的值小于s2的值时 ，compareTo是按照降序（由大到小）排序的
+	 */
+	public int compareTo(FlowBean o) {
+		return this.totalFlow > o.getTotalFlow() ? 1 : -1;
     }
 }
