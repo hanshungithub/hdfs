@@ -10,28 +10,31 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class WordCountDriver {
     public static void main(String[] args) throws Exception {
-        Configuration configuration = new Configuration();
-        Job job = Job.getInstance(configuration);
 
-        job.setJarByClass(WordCountDriver.class);
+		args = new String[]{"F:/webupload/wordcount","F:/webupload/wordcountout"};
 
-        job.setMapperClass(WordCountMapper.class);
-        job.setReducerClass(WordCountReducer.class);
+		Configuration configuration = new Configuration();
+		Job job = Job.getInstance(configuration);
 
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(IntWritable.class);
+		job.setJarByClass(WordCountDriver.class);
 
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+		job.setMapperClass(WordCountMapper.class);
+		job.setReducerClass(WordCountReducer.class);
 
-        job.setCombinerClass(WordCountCombainer.class);
-        //job.setCombinerClass(WordCountReducer.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
 
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
 
-        boolean completion = job.waitForCompletion(true);
+		job.setCombinerClass(WordCountCombainer.class);
+		//job.setCombinerClass(WordCountReducer.class);
 
-        System.exit(completion ? 0 : 1);
-    }
+		FileInputFormat.setInputPaths(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+		boolean completion = job.waitForCompletion(true);
+
+		System.exit(completion ? 0 : 1);
+	}
 }

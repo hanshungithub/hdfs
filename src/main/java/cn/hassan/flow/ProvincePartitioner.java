@@ -17,7 +17,7 @@ public class ProvincePartitioner extends Partitioner<Text,FlowBean> {
         } else if ("139".equals(preNum)) {
             return 3;
         }
-        return 4;
+        return partitioner;
     }
 
 }

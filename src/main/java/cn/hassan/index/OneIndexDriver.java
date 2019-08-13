@@ -13,7 +13,7 @@ public class OneIndexDriver {
 
     public static void main(String[] args) throws Exception {
 
-        args = new String[]{"E:/hadoop/index","E:/hadoop/indexout"};
+        args = new String[]{"F:/webupload/index","F:/webupload/indexout"};
 
         Configuration cfg = new Configuration();
 
