@@ -1,12 +1,13 @@
 package cn.hassan.flow;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class FlowBean implements Writable {
+public class FlowBean implements WritableComparable<FlowBean> {
 
     private long upFlow;
     private long downFlow;
@@ -83,4 +84,9 @@ public class FlowBean implements Writable {
         return upFlow + "\t" + downFlow + "\t" + totalFlow;
     }
 
+
+	@Override
+	public int compareTo(FlowBean o) {
+		return this.totalFlow > o.getTotalFlow() ? -1 : 1;
+	}
 }
