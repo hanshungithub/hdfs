@@ -68,9 +68,13 @@ public class HBase {
 
 	@Test
 	public void getTest() throws IOException {
-		Table table = connection.getTable(TableName.valueOf("test"));
+		Table table = connection.getTable(TableName.valueOf("users"));
 		Get get = new Get("1000".getBytes());
 		Result result = table.get(get);
+		List<KeyValue> columns = result.getColumn(Bytes.toBytes("info"), Bytes.toBytes("password"));
+		for (KeyValue column : columns) {
+			System.out.println(Bytes.toString(column.getValue()));
+		}
 		List<Cell> cells = result.listCells();
 		printValue(cells);
 	}
@@ -90,13 +94,21 @@ public class HBase {
 	}
 
 	@Test
-	public void addTest() throws IOException {
-		Table table = connection.getTable(TableName.valueOf("test"));
+	public void updateTest() throws IOException {
+		Table table = connection.getTable(TableName.valueOf("users"));
+		Put put = new Put(Bytes.toBytes("1000"));
+		put.addColumn(Bytes.toBytes("info"),Bytes.toBytes("password"), Bytes.toBytes("abcd"));
+		table.put(put);
+	}
 
-		Put put = new Put(Bytes.toBytes("1002"));
-		put.addColumn(Bytes.toBytes("cf"), Bytes.toBytes("name"), Bytes.toBytes("tom"));
-		put.addColumn(Bytes.toBytes("cf"), Bytes.toBytes("sex"), Bytes.toBytes("male"));
-		put.addColumn(Bytes.toBytes("cf"), Bytes.toBytes("age"), Bytes.toBytes("25"));
+	@Test
+	public void addTest() throws IOException {
+		Table table = connection.getTable(TableName.valueOf("users"));
+
+		Put put = new Put(Bytes.toBytes("1000"));
+		put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("name"), Bytes.toBytes("mark twain"));
+		put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("email"), Bytes.toBytes("hassanbox@qq.com"));
+		put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("password"), Bytes.toBytes("123456"));
 
 		table.put(put);
 	}
@@ -111,13 +123,17 @@ public class HBase {
 		try {
 			Admin admin = connection.getAdmin();
 			if (admin.tableExists(TableName.valueOf(tableName))) {
-				System.out.println("表已经存在");
+				//System.out.println("表已经存在");
+				//添加列簇
+				HColumnDescriptor columnDescriptor = new HColumnDescriptor("activity");
+				admin.addColumn(TableName.valueOf("users"),columnDescriptor);
 			}else {
 				HTableDescriptor descriptor = new HTableDescriptor(TableName.valueOf(tableName));
 				for (String column : columns) {
 					HColumnDescriptor columnDescriptor = new HColumnDescriptor(column);
 					descriptor.addFamily(columnDescriptor);
 				}
+
 				admin.createTable(descriptor);
 			}
 		} catch (IOException e) {
